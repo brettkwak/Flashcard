@@ -8,6 +8,7 @@ import java.util.Set;
 public class Tag {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false, length = 100)
@@ -16,6 +17,7 @@ public class Tag {
     @Column(length = 500)
     private String description;
 
+    @ManyToMany(mappedBy = "tags")
     private Set<Flashcard> flashcards = new HashSet<>();
 
     // Constructors
