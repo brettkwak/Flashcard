@@ -8,6 +8,7 @@ import java.util.Set;
 public class Flashcard {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 1000)
@@ -41,34 +42,30 @@ public class Flashcard {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getFront() {
         return front;
     }
-
     public void setFront(String front) {
         this.front = front;
     }
-
     public String getBack() {
         return back;
     }
-
     public void setBack(String back) {
         this.back = back;
     }
-
     public Set<Tag> getTags() {
         return tags;
     }
-
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
+
+    public FlashcardSet getFlashcardSet() { return flashcardSet; }
+    public void setFlashcardSet(FlashcardSet flashcardSet) { this.flashcardSet = flashcardSet; }
 
 
 }
