@@ -27,4 +27,9 @@ public class FlashcardSet {
     public void setFlashcards(List<Flashcard> flashcards) { this.flashcards = flashcards; }
 
 
+    public void addFlashcard(Flashcard flashcard) {
+        flashcards.add(flashcard);
+        flashcard.setFlashcardSet(this);
+    }
+
 }

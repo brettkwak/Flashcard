@@ -16,6 +16,11 @@ public class Flashcard {
     @Column(nullable = false, length = 1000)
     private String back;
 
+    // Relationship with FlashcardSet
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "flashcard_set_id")
+    private FlashcardSet flashcardSet;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "flashcard_tags",
