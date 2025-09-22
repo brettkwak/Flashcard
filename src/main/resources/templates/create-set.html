@@ -3,20 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Create New Flashcard Set</title>
+    <style>
+        .card-input-pair { display: flex; gap: 10px; margin-bottom: 10px; }
+        .card-input-pair input { flex-grow: 1; }
+    </style>
 </head>
 <body>
-<h1>Create a New Flashcard Set</h1>
-<form>
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title">
-    </div>
-    <div>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea>
-    </div>
-    <hr>
-    <button type="submit">Create Set</button>
-</form>
+    <h1>Create a New Flashcard Set</h1>
+    <form th:action="@{sets/create}" method="post">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <hr>
+
+        <hr2>Flashcards</hr2>
+        <div id="flashcard-inputs">
+            <div classs="card-input-pair">
+                <input type="text" name="flashcards[0].front" placeholder="Front" required>
+                <input type="text" name="flashcards[0].back" placeholder="Back" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addCard()">Add New Card</button>
+        <hr>
+
+        <button type="submit">Create Set</button>
+    </form>
+
+    <script>
+        let cardIndex = 1;
+
+        function addCard() {
+            const container = document.getElementById('flashcard-inputs');
+
+            const newPair = document.createElement('div');
+            newPair.classList.add('card-input-pair');
+
+            newPair.innerHTML = `
+                <input type="text" name="flashcards[${cardIndex}].front" placeholder="Front" required>
+                <input type="text" name="flashcards[${cardIndex}].back" placeholder="Back" required>
+            `;
+
+            container.appendChild(newPair);
+            cardIndex++;
+        }
+    </script>
+
+
 </body>
 </html>
