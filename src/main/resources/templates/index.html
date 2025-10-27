@@ -8,12 +8,20 @@
 </head>
 <body>
 <div class="container">
-    <header>
-        <h1>Flashcard</h1>
-    </header>
-    <main>
-        <a href="/sets/create">Create New Set</a>
-    </main>
+    <h1>Flashcard</h1>
+    <a th:href="@{/sets/create}">Create New Set</a>
+    <hr>
+    <h2>My Flashcard Sets</h2>
+    <div th:if="${#lists.isEmpty(flashcardSets)}">
+        <p>No sets created yet</p>
+    </div>
+    <ul th:unless="${#lists.isEmpty(flashcardSets)}">
+        <li th:each="set : ${flashcardSets}">
+            <h3 th:text="${set.title}">Set Title</h3>
+            <p th:text="${set.description}">Set Description</p>
+            <a th:href="@{/sets/{id}(id=${set.id})}">View Set</a>
+        </li>
+    </ul>
 
 
 </div>
