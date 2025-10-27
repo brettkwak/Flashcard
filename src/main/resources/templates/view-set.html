@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${flashcardSet.title}">View Set</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1 th:text="${flashcardSet.title}">Set Title</h1>
+  <p th:text="${flashcardSet.description}">Set Description</p>
+  <hr>
+</body>
+</html>
