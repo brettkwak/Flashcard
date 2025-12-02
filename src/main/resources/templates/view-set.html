@@ -10,6 +10,17 @@
 <body>
   <h1 th:text="${flashcardSet.title}">Set Title</h1>
   <p th:text="${flashcardSet.description}">Set Description</p>
+
+  <table>
+    <tr>
+      <th>Front</th>
+      <th>Back</th>
+    </tr>
+    <tr th:each="card : ${flashcardSet.flashcards}">
+      <td th:text="${card.front}">Front</td>
+      <td th:text="${card.back}">Back</td>
+    </tr>
+  </table>
   <hr>
 </body>
 </html>
