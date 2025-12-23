@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Edit Set</title>
+  <style>
+    .card-row { margin-bottom: 10px; display: flex; gap: 10px; }
+    input[type="text"] { padding: 5px; flex: 1; }
+  </style>
 </head>
 <body>
+<h1>Edit Set</h1>
 
+<form th:action="@{/sets/{id}/edit(id=${flashcardSet.id})}" th:object="${flashcardSet}" method="post">
+
+  <div>
+    <label>Title:</label>
+    <input type="text" th:field="*{title}" required>
+  </div>
+  <br>
+  <div>
+    <label>Description:</label>
+    <input type="text" th:field="*{description}">
+  </div>
+  <hr>
+
+  <h3>Cards</h3>
+  <div th:each="card, stat : *{flashcards}" class="card-row">
+    <input type="hidden" th:field="*{flashcards[__${stat.index}__].id}">
+
+    <input type="text" th:field="*{flashcards[__${stat.index}__].front}" required>
+    <input type="text" th:field="*{flashcards[__${stat.index}__].back}" required>
+  </div>
+
+  <br>
+  <button type="submit">Save All Changes</button>
+  <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Cancel</a>
+</form>
 </body>
 </html>
