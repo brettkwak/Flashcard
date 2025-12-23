@@ -45,4 +45,13 @@ public class FlashcardSetController {
         return "view-set";
     }
 
+    @GetMapping("/sets/{id}/edit")
+    public String showEditSetForm(@PathVariable Long id, Model model) {
+        FlashcardSet set = flashcardSetRepository.findById(id).orElse(null);
+        if (set == null) return "redirect:/";
+
+        model.addAttribute("flashcardSet", set);
+        return "edit-set";
+    }
+
 }
