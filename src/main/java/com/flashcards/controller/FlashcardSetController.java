@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Controller
 public class FlashcardSetController {
 
@@ -52,6 +54,33 @@ public class FlashcardSetController {
 
         model.addAttribute("flashcardSet", set);
         return "edit-set";
+    }
+
+    @PostMapping("/sets/{id}/edit")
+    public String updateSet(@PathVariable Long id, @ModelAttribute FlashcardSet formData) {
+        FlashcardSet existingSet = flashcardSetRepository.findById(id).orElse(null);
+        if (existingSet != null) {
+            existingSet.setTitle(formData.getTitle());
+            existingSet.setDescription(formData.getDescription());
+
+            List<Flashcard> submittedCards = formData.getFlashcards();
+            List<Flashcard> existingCards = existingSet.getFlashcards();
+
+            for (int i=0; i < existingCards.size(); i++) {
+                if (i < submittedCards.size()) {
+                    existingCards.get(i).setFront(submittedCards.get(i).getFront());
+                    existingCards.get(i).setBack(submittedCards.get(i).getBack());
+                }
+            }
+
+            flashcardSetRepository.save(existingSet);
+
+            return "redirect:/sets/{id}";
+
+        }
+
+        return "redirect:/";
+
     }
 
 }
