@@ -83,4 +83,13 @@ public class FlashcardSetController {
 
     }
 
+    @GetMapping("/sets/{id}/study")
+    public String studySet(@PathVariable Long id, Model model) {
+        FlashcardSet set = flashcardSetRepository.findById(id).orElse(null);
+        if (set == null) return "redirect:/";
+
+        model.addAttribute("flashcardSet", set);
+        return "study";
+    }
+
 }
