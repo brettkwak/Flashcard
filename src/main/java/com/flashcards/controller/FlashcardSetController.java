@@ -6,6 +6,9 @@ import com.flashcards.model.FlashcardSet;
 import com.flashcards.repository.FlashcardSetRepository;
 import com.flashcards.service.FlashcardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,6 +101,24 @@ public class FlashcardSetController {
 
         model.addAttribute("flashcardSet", setDTO);
         return "study";
+    }
+
+    @GetMapping("/sets/{id}/export")
+    public ResponseEntity<FlashcardSetDTO> exportSet(@PathVariable Long id) {
+        FlashcardSet set = flashcardSetRepository.findById(id).orElse(null);
+
+        if (set == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        FlashcardSetDTO dto = flashcardMapper.toDTO(set);
+
+        String filename = "flashcards-" + id + ".json";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(dto);
     }
 
 }
