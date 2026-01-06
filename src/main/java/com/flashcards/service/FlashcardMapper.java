@@ -13,6 +13,7 @@ public class FlashcardMapper {
     // Entity -> DTO
     public FlashcardSetDTO toDTO(FlashcardSet set) {
         FlashcardSetDTO dto = new FlashcardSetDTO();
+        dto.setId(set.getId());
         dto.setTitle(set.getTitle());
         dto.setDescription(set.getDescription());
 
