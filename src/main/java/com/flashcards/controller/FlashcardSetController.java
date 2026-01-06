@@ -1,8 +1,11 @@
 package com.flashcards.controller;
 
+import com.flashcards.dto.FlashcardSetDTO;
 import com.flashcards.model.Flashcard;
 import com.flashcards.model.FlashcardSet;
 import com.flashcards.repository.FlashcardSetRepository;
+import com.flashcards.service.FlashcardMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,12 +86,17 @@ public class FlashcardSetController {
 
     }
 
+    @Autowired
+    private FlashcardMapper flashcardMapper;
+
     @GetMapping("/sets/{id}/study")
     public String studySet(@PathVariable Long id, Model model) {
         FlashcardSet set = flashcardSetRepository.findById(id).orElse(null);
         if (set == null) return "redirect:/";
 
-        model.addAttribute("flashcardSet", set);
+        FlashcardSetDTO setDTO = flashcardMapper.toDTO(set);
+
+        model.addAttribute("flashcardSet", setDTO);
         return "study";
     }
 
