@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Study Mode</title>
+</head>
+<body>
+    <h1 th:text="${flashcardSet.title}">Set Title</h1>
+    <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Back to Set</a>
+</body>
+</html>
