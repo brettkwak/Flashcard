@@ -2,9 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Study Mode</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; }
+        .card-display { width: 500px; height: 250px; margin: 30px auto; border: 2px solid #333; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; background: white; }
+    </style>
 </head>
 <body>
     <h1 th:text="${flashcardSet.title}">Set Title</h1>
+
+    <div class="card-display" id="card-content">
+        Front
+    </div>
+
     <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Back to Set</a>
 </body>
 </html>
