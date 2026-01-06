@@ -12,6 +12,7 @@
   <p th:text="${flashcardSet.description}">Set Description</p>
 
   <a th:href="@{/sets/{id}/edit(id=${flashcardSet.id})}">Edit Set</a>
+  <a th:href="@{/sets/{id}/study(id=${flashcardSet.id})}">Study</a>
   <table>
     <tr>
       <th>Front</th>
