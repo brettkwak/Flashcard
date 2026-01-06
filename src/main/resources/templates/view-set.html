@@ -13,6 +13,7 @@
 
   <a th:href="@{/sets/{id}/edit(id=${flashcardSet.id})}">Edit Set</a>
   <a th:href="@{/sets/{id}/study(id=${flashcardSet.id})}">Study</a>
+  <a th:href="@{/sets/{id}/export(id=${flashcardSet.id})}" class="btn btn-secondary" target="_blank">Export as JSON</a>
   <table>
     <tr>
       <th>Front</th>
