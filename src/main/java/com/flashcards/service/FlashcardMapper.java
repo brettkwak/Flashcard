@@ -16,7 +16,7 @@ public class FlashcardMapper {
         dto.setTitle(set.getTitle());
         dto.setDescription(set.getDescription());
 
-        dto.setCards(set.getFlashcards().steram()
+        dto.setCards(set.getFlashcards().stream()
                 .map(card -> new FlashcardDTO(card.getFront(), card.getBack()))
                 .collect(Collectors.toList()));
 
@@ -24,7 +24,7 @@ public class FlashcardMapper {
     }
 
     // DTO -> Entity
-    public FlashcardSet toEntity(FlashcardsetDTO dto) {
+    public FlashcardSet toEntity(FlashcardSetDTO dto) {
         FlashcardSet set = new FlashcardSet();
         set.setTitle(dto.getTitle());
         set.setDescription(dto.getDescription());
