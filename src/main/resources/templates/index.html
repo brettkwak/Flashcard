@@ -10,6 +10,7 @@
 <div class="container">
     <h1>Flashcard</h1>
     <a th:href="@{/sets/create}">Create New Set</a>
+    <a th:href="@{/sets/import}">Import Set(JSON)</a>
     <hr>
     <h2>My Flashcard Sets</h2>
     <div th:if="${#lists.isEmpty(flashcardSets)}">
