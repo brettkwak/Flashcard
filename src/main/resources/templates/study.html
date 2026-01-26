@@ -15,5 +15,26 @@
     </div>
 
     <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Back to Set</a>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const cards = /*[[${flashcardSet.cards}]]*/ [];
+
+        let currentIndex = 0;
+
+        const cardContent = document.getElementById('card-content');
+
+        function showCard() {
+            if (cards.length > 0) {
+                cardContent.textContent = cards[currentIndex].front;
+            } else {
+                cardContent.textContent = "No cards in this set!";
+            }
+        }
+
+        showCard();
+        /*]]>*/
+    </script>
+
 </body>
 </html>
