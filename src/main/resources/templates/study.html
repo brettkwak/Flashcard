@@ -16,6 +16,7 @@
 
     <div style="margin-top: 20px;">
         <button onclick="prevCard()">Previous</button>
+        <span id="counter" style="margin: 0 15px";>1 / 1</span>
         <button onclick="nextCard()">Next</button>
     </div>
 
@@ -51,10 +52,22 @@
             }
         });
 
+        const counterElement = document.getElementById('counter');
+
+        function updateCounter() {
+            if (cards.length > 0) {
+                counterElement.textContent = (currentIndex + 1) + " / " + cards.length;
+            } else {
+                counterElement.textContent = "0 / 0";
+            }
+
+        }
+
         function nextCard() {
             if (currentIndex < cards.length - 1) {
                 currentIndex++;
                 showCard();
+                updateCounter();
             }
         }
 
@@ -62,10 +75,12 @@
             if (currentIndex > 0) {
                 currentIndex--;
                 showCard();
+                updateCounter();
             }
         }
 
         showCard();
+        updateCounter();
         /*]]>*/
     </script>
 
