@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.io.IOException;
 
 @Controller
 public class FlashcardSetController {
@@ -124,6 +128,15 @@ public class FlashcardSetController {
     @GetMapping("/sets/import")
     public String showImportForm() {
         return "import-set";
+    }
+
+    @PostMapping("/sets/import")
+    public String processImport(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "redirect:/sets/import?error=empty";
+        }
+
+        return "redirect:/";
     }
 
 
