@@ -136,7 +136,20 @@ public class FlashcardSetController {
             return "redirect:/sets/import?error=empty";
         }
 
-        return "redirect:/";
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            FlashcardSetDTO dto = mapper.readValue(file.getInputStream(),
+                    FlashcardSetDTO.class);
+
+            FlashcardSet set = flashcardMapper.toEntity(dto);
+
+            flashcardSetRepository.save(set);
+
+            return "redirect:/";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "redirect:/sets/import?error=processing";
+        }
     }
 
 
