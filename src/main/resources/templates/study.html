@@ -21,16 +21,30 @@
         const cards = /*[[${flashcardSet.cards}]]*/ [];
 
         let currentIndex = 0;
+        let isShowingFront = true;
 
         const cardContent = document.getElementById('card-content');
 
         function showCard() {
             if (cards.length > 0) {
+                isShowingFront = true;
                 cardContent.textContent = cards[currentIndex].front;
             } else {
                 cardContent.textContent = "No cards in this set!";
             }
         }
+
+        cardContent.addEventListener('click', function() {
+            if (cards.length == 0) return;
+
+            if (isShowingFront) {
+                cardContent.textContent = cards[currentIndex].back;
+                isShowingFront = false;
+            } else {
+                cardContent.textContent = cards[currentIndex].front;
+                isShowingFront = true;
+            }
+        });
 
         showCard();
         /*]]>*/
