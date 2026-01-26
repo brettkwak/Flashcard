@@ -14,6 +14,11 @@
         Front
     </div>
 
+    <div style="margin-top: 20px;">
+        <button onclick="prevCard()">Previous</button>
+        <button onclick="nextCard()">Next</button>
+    </div>
+
     <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Back to Set</a>
 
     <script th:inline="javascript">
@@ -45,6 +50,20 @@
                 isShowingFront = true;
             }
         });
+
+        function nextCard() {
+            if (currentIndex < cards.length - 1) {
+                currentIndex++;
+                showCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showCard();
+            }
+        }
 
         showCard();
         /*]]>*/
