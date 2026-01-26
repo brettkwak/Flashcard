@@ -20,6 +20,11 @@
         <button onclick="nextCard()">Next</button>
     </div>
 
+    <div style="margin-top: 20px;">
+        <button onclick="markResult(true)">Correct</button>
+        <button onclick="markResult(false)">Wrong</button>
+    </div>
+
     <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Back to Set</a>
 
     <script th:inline="javascript">
@@ -74,6 +79,46 @@
         function prevCard() {
             if (currentIndex > 0) {
                 currentIndex--;
+                showCard();
+                updateCounter();
+            }
+        }
+
+        let wrongCards = [];
+
+        function markResult(isCorrect) {
+            if (!isCorrect) {
+                wrongCards.push(cards[currentIndex]);
+            }
+
+            if (currentIndex < cards.length - 1) {
+                nextCard();
+            } else {
+                showSummary();
+            }
+        }
+
+        function showSummary() {
+            const cardDisplay = document.getElementById('card-content');
+
+            cardDisplay.innerHTML = `
+                <div style="text-align:center">
+                    <h3>Session Complete!</h3>
+                    <p>You got ${wrongCards.length} wrong out of ${cards.length}.</p>
+                    ${wrongCards.length > 0 ? '<button onclick="reviewWrong()">Review Wrong Cards</button>' : ''}
+                    <button onclick="location.reload()">Restart All</button>
+                </div>
+            `;
+        }
+
+        function reviewWrong() {
+            if (wrongCards.length > 0) {
+                cards.length = 0;
+                cards.push(...wrongCards);
+
+                wrongCards = [];
+
+                currentIndex = 0;
                 showCard();
                 updateCounter();
             }
