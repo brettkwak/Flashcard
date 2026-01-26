@@ -5,6 +5,10 @@ public class FlashcardDTO {
     public String back;
 
     // Constructor
+    public FlashcardDTO() {
+
+    }
+
     public FlashcardDTO(String front, String back) {
         this.front = front;
         this.back = back;
