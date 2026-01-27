@@ -38,6 +38,12 @@ public class FlashcardSetController {
 
     @PostMapping("/sets/create")
     public String createSet(@ModelAttribute FlashcardSet flashcardSet) {
+        flashcardSet.getFlashcards().removeIf(card ->
+                card == null ||
+                        card.getFront() == null || card.getFront().trim().isEmpty() ||
+                        card.getBack() == null || card.getBack().trim().isEmpty()
+        );
+
         for (Flashcard card : flashcardSet.getFlashcards()) {
             card.setFlashcardSet(flashcardSet);
         }
