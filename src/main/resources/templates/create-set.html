@@ -50,11 +50,17 @@
             newPair.innerHTML = `
                 <input type="text" name="flashcards[${cardIndex}].front" placeholder="Front" required>
                 <input type="text" name="flashcards[${cardIndex}].back" placeholder="Back" required>
+                <button type="button" onclick="removeCard(this)">X</button>
             `;
 
             container.appendChild(newPair);
             cardIndex++;
         }
+
+        function removeCard(button) {
+            button.parentElement.remove();
+        }
+
     </script>
 
 
