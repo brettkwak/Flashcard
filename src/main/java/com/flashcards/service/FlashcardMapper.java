@@ -19,7 +19,11 @@ public class FlashcardMapper {
         dto.setDescription(set.getDescription());
 
         dto.setCards(set.getFlashcards().stream()
-                .map(card -> new FlashcardDTO(card.getFront(), card.getBack()))
+                .map(card -> {
+                    FlashcardDTO cardDTO = new FlashcardDTO(card.getFront(), card.getBack());
+                    cardDTO.setId(card.getId());
+                    return cardDTO;
+                })
                 .collect(Collectors.toList()));
 
         return dto;
