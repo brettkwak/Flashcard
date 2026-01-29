@@ -8,6 +8,7 @@ public class FlashcardSetDTO {
     private String title;
     private String description;
     private List<FlashcardDTO> cards = new ArrayList<>();
+    private List<Long> idsToDelete = new ArrayList<>();
 
     // Gets, Sets
     public Long getId() { return id; }
@@ -18,6 +19,8 @@ public class FlashcardSetDTO {
     public void setDescription(String description) { this.description = description; }
     public List<FlashcardDTO> getCards() { return cards; }
     public void setCards(List<FlashcardDTO> cards) { this.cards = cards; }
+    public List<Long> getIdsToDelete() { return idsToDelete; }
+    public void setIdsToDelete(List<Long> idsToDelete) { this.idsToDelete = idsToDelete; }
 
     public void addCard(FlashcardDTO card) {
         this.cards.add(card);
