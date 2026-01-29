@@ -17,7 +17,7 @@ public class FlashcardDTO {
 
     // Gets, Sets
     public Long getId() { return id; }
-    public void setID(Long id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
     public String getFront() { return front; }
     public void setFront(String front) { this.front = front; }
     public String getBack() { return back; }
