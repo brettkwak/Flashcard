@@ -24,11 +24,12 @@
   <hr>
 
   <h3>Cards</h3>
-  <div th:each="card, stat : *{flashcards}" class="card-row">
-    <input type="hidden" th:field="*{flashcards[__${stat.index}__].id}">
-
-    <input type="text" th:field="*{flashcards[__${stat.index}__].front}" required>
-    <input type="text" th:field="*{flashcards[__${stat.index}__].back}" required>
+  <div id="card-container">
+    <div th:each="card, stat : *{cards}" class="card-row" th:id="'row-' + ${stat.index}">
+      <input type="hidden" th:field="*{cards[__${stat.index}__].id}">
+      <input type="text" th:field="*{cards[__${stat.index}__].front}" placeholder="Front" required>
+      <input type="text" th:field="*{cards[__${stat.index}__].back}" placeholder="Back" required>
+    </div>
   </div>
 
   <br>
