@@ -68,7 +68,10 @@ public class FlashcardSetController {
         FlashcardSet set = flashcardSetRepository.findById(id).orElse(null);
         if (set == null) return "redirect:/";
 
-        model.addAttribute("flashcardSet", set);
+
+        FlashcardSetDTO dto = flashcardMapper.toDTO(set);
+
+        model.addAttribute("flashcardSet", dto);
         return "edit-set";
     }
 
