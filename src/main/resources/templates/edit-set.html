@@ -32,9 +32,32 @@
     </div>
   </div>
 
+  <button type="button" onclick="addCard()">Add New Card</button>
+
   <br>
   <button type="submit">Save All Changes</button>
   <a th:href="@{/sets/{id}(id=${flashcardSet.id})}">Cancel</a>
 </form>
+
+  <script th:inline="javascript">
+
+    let cardIndex = /*[[${flashcardSet.cards.size()}]]*/ 0;
+
+    function addCard() {
+    const container = document.getElementById('card-container');
+    const newRow = document.createElement('div');
+    newRow.className = 'card-row';
+
+    newRow.innerHTML = `
+        <input type="text" name="cards[${cardIndex}].front" placeholder="Front" required>
+        <input type="text" name="cards[${cardIndex}].back" placeholder="Back" required>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">X</button>
+    `;
+
+    container.appendChild(newRow);
+    cardIndex++;
+}
+  </script>
+
 </body>
 </html>
