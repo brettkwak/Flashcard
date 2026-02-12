@@ -1,5 +1,6 @@
 package com.flashcards.controller;
 
+import com.flashcards.dto.FlashcardDTO;
 import com.flashcards.dto.FlashcardSetDTO;
 import com.flashcards.model.Flashcard;
 import com.flashcards.model.FlashcardSet;
@@ -76,29 +77,37 @@ public class FlashcardSetController {
     }
 
     @PostMapping("/sets/{id}/edit")
-    public String updateSet(@PathVariable Long id, @ModelAttribute FlashcardSet formData) {
+    public String updateSet(@PathVariable Long id, @ModelAttribute FlashcardSetDTO formData) {
         FlashcardSet existingSet = flashcardSetRepository.findById(id).orElse(null);
-        if (existingSet != null) {
-            existingSet.setTitle(formData.getTitle());
-            existingSet.setDescription(formData.getDescription());
+        if (existingSet == null) return "redirect:/";
 
-            List<Flashcard> submittedCards = formData.getFlashcards();
-            List<Flashcard> existingCards = existingSet.getFlashcards();
+        existingSet.setTitle(formData.getTitle());
+        existingSet.setDescription(formData.getDescription());
 
-            for (int i=0; i < existingCards.size(); i++) {
-                if (i < submittedCards.size()) {
-                    existingCards.get(i).setFront(submittedCards.get(i).getFront());
-                    existingCards.get(i).setBack(submittedCards.get(i).getBack());
-                }
+        if (formData.getIdsToDelete() != null && !formData.getIdsToDelete().isEmpty()) {
+            for (Long cardId : formData.getIdsToDelete()) {
+                existingSet.getFlashcards().removeIf(c -> c.getId().equals(cardId));
             }
+        }
 
-            flashcardSetRepository.save(existingSet);
-
-            return "redirect:/sets/{id}";
+        for (FlashcardDTO dto : formData.getCards()) {
+            if (dto.getId() != null) {
+                existingSet.getFlashcards().stream()
+                        .filter(c -> c.getId().equals(dto.getId()))
+                        .findFirst()
+                        .ifPresent(card -> {
+                            card.setFront(dto.getFront());
+                            card.setBack(dto.getBack());
+                        });
+            } else {
+                Flashcard newCard = new Flashcard(dto.getFront(), dto.getBack());
+                existingSet.addFlashcard(newCard);
+            }
 
         }
 
-        return "redirect:/";
+        flashcardSetRepository.save(existingSet);
+        return "redirect:/sets/" + id;
 
     }
 
