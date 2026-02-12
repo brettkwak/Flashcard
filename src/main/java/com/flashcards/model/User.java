@@ -1,6 +1,11 @@
 package com.flashcards.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -18,6 +23,9 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FlashcardSet> flashcardSets = new ArrayList<>();
 
     // Constructor
     public User() {}
@@ -37,5 +45,12 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public List<FlashcardSet> getFlashcardSets() { return flashcardSets; }
+    public void setFlashcardSets(List<FlashcardSet> flashcardSets) { this.flashcardSets = flashcardSets; }
+
+    public void addFlashcardSet(FlashcardSet set) {
+        flashcardSets.add(set);
+        set.setUser(this);
+    }
 
 }
