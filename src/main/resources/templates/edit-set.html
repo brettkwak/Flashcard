@@ -29,8 +29,12 @@
       <input type="hidden" th:field="*{cards[__${stat.index}__].id}">
       <input type="text" th:field="*{cards[__${stat.index}__].front}" placeholder="Front" required>
       <input type="text" th:field="*{cards[__${stat.index}__].back}" placeholder="Back" required>
+
+      <button type="button" class="btn-remove" th:onclick="'markForDelete(' + ${stat.index} + ', ' + *{cards[__${stat.index}__].id} + ')'">X</button>
     </div>
   </div>
+
+  <div id="delete-container"></div>
 
   <button type="button" onclick="addCard()">Add New Card</button>
 
@@ -42,6 +46,17 @@
   <script th:inline="javascript">
 
     let cardIndex = /*[[${flashcardSet.cards.size()}]]*/ 0;
+
+    function markForDelete(rowIndex, cardId) {
+      document.getElementById('row-' + rowIndex).style.display = 'none';
+
+      const deleteContainer = document.getElementById('delete-container');
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'idsToDelete';
+      input.value = cardId;
+      deleteContainer.appendChild(input);
+    }
 
     function addCard() {
     const container = document.getElementById('card-container');
@@ -56,7 +71,7 @@
 
     container.appendChild(newRow);
     cardIndex++;
-}
+    }
   </script>
 
 </body>
