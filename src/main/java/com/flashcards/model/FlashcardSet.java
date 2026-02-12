@@ -1,6 +1,9 @@
 package com.flashcards.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,10 @@ public class FlashcardSet {
     @OneToMany(mappedBy = "flashcardSet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Flashcard> flashcards = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
     // Gets, Sets
     public Long getId() { return id; }
@@ -26,6 +33,8 @@ public class FlashcardSet {
     public void setDescription(String description) { this.description = description; }
     public List<Flashcard> getFlashcards() { return flashcards; }
     public void setFlashcards(List<Flashcard> flashcards) { this.flashcards = flashcards; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
 
     public void addFlashcard(Flashcard flashcard) {
