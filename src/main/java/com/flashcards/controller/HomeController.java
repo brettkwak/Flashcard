@@ -28,4 +28,9 @@ public class HomeController {
     public String cards() {
         return "cards";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 }
