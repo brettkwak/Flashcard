@@ -6,7 +6,6 @@ import com.flashcards.repository.FlashcardSetRepository;
 import com.flashcards.repository.UserRepository;
 import java.security.Principal;
 import java.util.Collection;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +20,11 @@ public class HomeController {
 
     private final FlashcardSetRepository flashcardSetRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public HomeController(FlashcardSetRepository flashcardSetRepository,
-                          UserRepository userRepository,
-                          PasswordEncoder passwordEncoder) {
+                          UserRepository userRepository) {
         this.flashcardSetRepository = flashcardSetRepository;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/")
@@ -50,36 +46,5 @@ public class HomeController {
         return "cards";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
 
-    @GetMapping("/register")
-    public String showRegistrationForm() {
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String registerUser(
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            Model model) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            model.addAttribute("error", "Username already exists");
-            return "register";
-        }
-
-        User newUser = new User();
-        newUser.setUsername(username);
-
-        String hashedPassword = passwordEncoder.encode(password);
-        newUser.setPassword(hashedPassword);
-
-        newUser.setRole("USER");
-
-        userRepository.save(newUser);
-
-        return "redirect:/login";
-    }
 }
