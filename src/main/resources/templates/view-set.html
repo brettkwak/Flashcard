@@ -14,6 +14,10 @@
   <a th:href="@{/sets/{id}/edit(id=${flashcardSet.id})}">Edit Set</a>
   <a th:href="@{/sets/{id}/study(id=${flashcardSet.id})}">Study</a>
   <a th:href="@{/sets/{id}/export(id=${flashcardSet.id})}" class="btn btn-secondary" target="_blank">Export as JSON</a>
+  <form th:action="@{/sets/{id}/delete(id=${flashcardSet.id})}" method="post"
+        style="display: inline;">
+    <button type="submit" style="color: red;">Delete Set</button>
+  </form>
   <table>
     <tr>
       <th>Front</th>
