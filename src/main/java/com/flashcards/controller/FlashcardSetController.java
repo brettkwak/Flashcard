@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.security.Principal;
@@ -124,6 +126,15 @@ public class FlashcardSetController {
         flashcardSetRepository.save(existingSet);
         return "redirect:/sets/" + id;
 
+    }
+
+    @PostMapping("/sets/{id}/delete")
+    public String deleteSet(@PathVariable long id) {
+        FlashcardSet existingSet = flashcardSetRepository.findById(id).orElse(null);
+        if (existingSet != null) {
+            flashcardSetRepository.delete(existingSet);
+        }
+        return "redirect:/";
     }
 
     @Autowired
