@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+
+<div th:fragment="navbar" style="padding: 10px; border-bottom: 1px solid #ccc; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+
+    <!-- Left Side: App Title / Home Link -->
+    <div>
+        <a th:href="@{/}" style="font-weight: bold; text-decoration: none; font-size: 1.2em;">Flashcard App</a>
+    </div>
+
+    <!-- Right Side: User Controls -->
+    <div style="display: flex; gap: 15px; align-items: center;">
+
+        <!-- If user is logged IN -->
+        <div sec:authorize="isAuthenticated()" style="display: flex; gap: 15px; align-items: center;">
+            <span>Logged in as: <b sec:authentication="name"></b></span>
+
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+
+        <!-- If user is logged OUT -->
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
