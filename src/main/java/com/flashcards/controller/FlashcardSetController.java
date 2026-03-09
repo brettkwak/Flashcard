@@ -4,7 +4,9 @@ import com.flashcards.dto.FlashcardDTO;
 import com.flashcards.dto.FlashcardSetDTO;
 import com.flashcards.model.Flashcard;
 import com.flashcards.model.FlashcardSet;
+import com.flashcards.model.User;
 import com.flashcards.repository.FlashcardSetRepository;
+import com.flashcards.repository.UserRepository;
 import com.flashcards.service.FlashcardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.security.Principal;
 
 import java.util.List;
 import java.io.IOException;
@@ -27,9 +30,15 @@ import java.io.IOException;
 public class FlashcardSetController {
 
     private FlashcardSetRepository flashcardSetRepository;
+    private final UserRepository userRepository;
 
-    public FlashcardSetController(FlashcardSetRepository flashcardSetRepository) {
+    public FlashcardSetController(FlashcardSetRepository flashcardSetRepository,
+                                  UserRepository userRepository,
+                                  FlashcardMapper flashcardMapper
+                                  ) {
         this.flashcardSetRepository = flashcardSetRepository;
+        this.userRepository = userRepository;
+        this.flashcardMapper = flashcardMapper;
     }
 
     @GetMapping("/sets/create")
@@ -38,7 +47,8 @@ public class FlashcardSetController {
     }
 
     @PostMapping("/sets/create")
-    public String createSet(@ModelAttribute FlashcardSet flashcardSet) {
+    public String createSet(@ModelAttribute FlashcardSet flashcardSet, Principal principal) {
+        String username = principal.getName();
         flashcardSet.getFlashcards().removeIf(card ->
                 card == null ||
                         card.getFront() == null || card.getFront().trim().isEmpty() ||
@@ -48,6 +58,11 @@ public class FlashcardSetController {
         for (Flashcard card : flashcardSet.getFlashcards()) {
             card.setFlashcardSet(flashcardSet);
         }
+
+        User user = userRepository.findByUsername(principal.getName())
+                        .orElseThrow(() -> new IllegalStateException("User Not Found"));
+        flashcardSet.setUser(user);
+
         flashcardSetRepository.save(flashcardSet);
         return "redirect:/";
     }
