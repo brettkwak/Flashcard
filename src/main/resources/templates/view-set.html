@@ -5,31 +5,67 @@
   <title th:text="${flashcardSet.title}">View Set</title>
   <style>
     body { font-family: sans-serif; text-align: center; }
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; text-align: center; }
+
+    /* Button layout */
+    .action-buttons { margin: 20px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; align-items: center; }
+    .action-buttons a { padding: 8px 12px; text-decoration: none; border: 1px solid #ccc; background-color: #f8f9fa; color: #333; border-radius: 4px; }
+    .action-buttons button { padding: 8px 12px; cursor: pointer; border: 1px solid #ccc; background-color: #f8f9fa; border-radius: 4px; font-size: 16px; }
+
+    /* Table styling */
+    .flashcard-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left; }
+    .flashcard-table th, .flashcard-table td { border: 1px solid #ddd; padding: 12px; }
+    .flashcard-table th { background-color: #f4f4f4; text-align: center; }
+
+    /* Empty state styling */
+    .empty-message { padding: 30px; background-color: #f9f9f9; border: 2px dashed #ccc; color: #666; margin-top: 20px; border-radius: 5px; }
   </style>
 </head>
 <body>
-  <h1 th:text="${flashcardSet.title}">Set Title</h1>
-  <p th:text="${flashcardSet.description}">Set Description</p>
 
-  <a th:href="@{/sets/{id}/edit(id=${flashcardSet.id})}">Edit Set</a>
-  <a th:href="@{/sets/{id}/study(id=${flashcardSet.id})}">Study</a>
-  <a th:href="@{/sets/{id}/export(id=${flashcardSet.id})}" class="btn btn-secondary" target="_blank">Export as JSON</a>
-  <form th:action="@{/sets/{id}/delete(id=${flashcardSet.id})}"
-        method="post"
-        style="display: inline;"
-        onsubmit="return confirm('Are you sure you want to delete this set?\nThis cannot be undone.');">
-    <button type="submit" style="color: red;">Delete Set</button>
-  </form>
-  <table>
-    <tr>
-      <th>Front</th>
-      <th>Back</th>
-    </tr>
-    <tr th:each="card : ${flashcardSet.flashcards}">
-      <td th:text="${card.front}">Front</td>
-      <td th:text="${card.back}">Back</td>
-    </tr>
-  </table>
-  <a th:href="@{/}">Back to Home</a>
+  <div th:replace="~{fragments :: navbar}"></div>
+
+  <div class="container">
+    <h1 th:text="${flashcardSet.title}">Set Title</h1>
+    <p th:text="${flashcardSet.description}">Set Description</p>
+
+    <div class="action-buttons">
+      <a th:href="@{/sets/{id}/study(id=${flashcardSet.id})}">Study</a>
+      <a th:href="@{/sets/{id}/edit(id=${flashcardSet.id})}">Edit Set</a>
+      <a th:href="@{/sets/{id}/export(id=${flashcardSet.id})}" target="_blank">Export as JSON</a>
+      <form th:action="@{/sets/{id}/delete(id=${flashcardSet.id})}"
+            method="post"
+            style="margin: 0;"
+            onsubmit="return confirm('Are you sure you want to delete this set?\nThis cannot be undone.');">
+        <button type="submit" style="color: red; border-color: red;">Delete Set</button>
+      </form>
+    </div>
+
+    <!-- Empty State Message (If list is empty) -->
+    <div th:if="${#lists.isEmpty(flashcardSet.flashcards)}" class="empty-message">
+      <h3>This set has no cards yet.</h3>
+    </div>
+
+    <!-- Styled Table (If list is not empty) -->
+    <table th:unless="${#lists.isEmpty(flashcardSet.flashcards)}" class="flashcard-table">
+      <thead>
+      <tr>
+        <th>Front</th>
+        <th>Back</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="card : ${flashcardSet.flashcards}">
+        <td th:text="${card.front}">Front</td>
+        <td th:text="${card.back}">Back</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 30px;">
+      <a th:href="@{/}">Back to Home</a>
+    </div>
+  </div>
+
 </body>
 </html>
