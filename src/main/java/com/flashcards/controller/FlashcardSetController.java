@@ -100,6 +100,7 @@ public class FlashcardSetController {
 
         existingSet.setTitle(formData.getTitle());
         existingSet.setDescription(formData.getDescription());
+        existingSet.setFrontFirst(formData.isFrontFirst());
 
         if (formData.getIdsToDelete() != null && !formData.getIdsToDelete().isEmpty()) {
             for (Long cardId : formData.getIdsToDelete()) {

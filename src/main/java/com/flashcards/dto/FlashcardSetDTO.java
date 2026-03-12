@@ -9,6 +9,7 @@ public class FlashcardSetDTO {
     private String description;
     private List<FlashcardDTO> cards = new ArrayList<>();
     private List<Long> idsToDelete = new ArrayList<>();
+    private boolean  frontFirst = true;
 
     // Gets, Sets
     public Long getId() { return id; }
@@ -21,6 +22,12 @@ public class FlashcardSetDTO {
     public void setCards(List<FlashcardDTO> cards) { this.cards = cards; }
     public List<Long> getIdsToDelete() { return idsToDelete; }
     public void setIdsToDelete(List<Long> idsToDelete) { this.idsToDelete = idsToDelete; }
+    public boolean isFrontFirst() {
+        return frontFirst;
+    }
+    public void setFrontFirst(boolean frontFirst) {
+        this.frontFirst = frontFirst;
+    }
 
     public void addCard(FlashcardDTO card) {
         this.cards.add(card);
