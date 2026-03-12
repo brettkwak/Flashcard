@@ -23,6 +23,14 @@
   </div>
   <hr>
 
+  <div>
+    <label for="frontFirst">Study Mode Default:</label>
+    <select id="frontFirst" name="frontFirst" style="margin-bottom: 15px; padding: 5px;">
+      <option value="true" th:selected="${flashcardSet.frontFirst == true}">Show Front First</option>
+      <option value="false" th:selected="${flashcardSet.frontFirst == false}">Show Back First</option>
+    </select>
+  </div>
+
   <h3>Cards</h3>
   <div id="card-container">
     <div th:each="card, stat : *{cards}" class="card-row" th:id="'row-' + ${stat.index}">
