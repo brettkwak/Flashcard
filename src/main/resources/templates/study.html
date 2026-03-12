@@ -31,16 +31,22 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         const cards = /*[[${flashcardSet.cards}]]*/ [];
+        const showFrontFirst = /*[[${flashcardSet.frontFirst}]]*/ true;
 
         let currentIndex = 0;
-        let isShowingFront = true;
+        let isShowingFront = showFrontFirst;
 
         const cardContent = document.getElementById('card-content');
 
         function showCard() {
             if (cards.length > 0) {
-                isShowingFront = true;
-                cardContent.textContent = cards[currentIndex].front;
+                isShowingFront = showFrontFirst;
+
+                if (isShowingFront) {
+                    cardContent.textContent = cards[currentIndex].front;
+                } else {
+                    cardContent.textContent = cards[currentIndex].back;
+                }
             } else {
                 cardContent.textContent = "No cards in this set!";
             }
