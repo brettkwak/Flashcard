@@ -17,6 +17,7 @@ public class FlashcardMapper {
         dto.setId(set.getId());
         dto.setTitle(set.getTitle());
         dto.setDescription(set.getDescription());
+        dto.setFrontFirst(set.isFrontFirst());
 
         dto.setCards(set.getFlashcards().stream()
                 .map(card -> {
@@ -34,6 +35,7 @@ public class FlashcardMapper {
         FlashcardSet set = new FlashcardSet();
         set.setTitle(dto.getTitle());
         set.setDescription(dto.getDescription());
+        set.setFrontFirst(dto.isFrontFirst());
 
         for (FlashcardDTO cardDTO : dto.getCards()) {
             Flashcard card = new Flashcard();

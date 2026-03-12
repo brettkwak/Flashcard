@@ -23,6 +23,8 @@ public class FlashcardSet {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "front_first", nullable = false)
+    private boolean frontFirst = true;
 
     // Gets, Sets
     public Long getId() { return id; }
@@ -35,6 +37,12 @@ public class FlashcardSet {
     public void setFlashcards(List<Flashcard> flashcards) { this.flashcards = flashcards; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+    public boolean isFrontFirst() {
+        return frontFirst;
+    }
+    public void setFrontFirst(boolean frontFirst) {
+        this.frontFirst = frontFirst;
+    }
 
 
     public void addFlashcard(Flashcard flashcard) {
