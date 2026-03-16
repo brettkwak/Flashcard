@@ -8,6 +8,7 @@ import com.flashcards.model.User;
 import com.flashcards.repository.FlashcardSetRepository;
 import com.flashcards.repository.UserRepository;
 import com.flashcards.service.FlashcardMapper;
+import com.flashcards.service.FlashcardSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,14 +35,17 @@ public class FlashcardSetController {
 
     private FlashcardSetRepository flashcardSetRepository;
     private final UserRepository userRepository;
+    private final FlashcardSetService flashcardSetService;
 
     public FlashcardSetController(FlashcardSetRepository flashcardSetRepository,
                                   UserRepository userRepository,
-                                  FlashcardMapper flashcardMapper
+                                  FlashcardMapper flashcardMapper,
+                                  FlashcardSetService flashcardSetService
                                   ) {
         this.flashcardSetRepository = flashcardSetRepository;
         this.userRepository = userRepository;
         this.flashcardMapper = flashcardMapper;
+        this.flashcardSetService = flashcardSetService;
     }
 
     @GetMapping("/sets/create")
@@ -94,39 +98,13 @@ public class FlashcardSetController {
         return "edit-set";
     }
 
-    @Transactional
     @PostMapping("/sets/{id}/edit")
     public String updateSet(@PathVariable Long id, @ModelAttribute FlashcardSetDTO formData) {
         FlashcardSet existingSet = flashcardSetRepository.findById(id).orElse(null);
         if (existingSet == null) return "redirect:/";
 
-        existingSet.setTitle(formData.getTitle());
-        existingSet.setDescription(formData.getDescription());
-        existingSet.setFrontFirst(formData.isFrontFirst());
+        flashcardSetService.updateFlashcardSet(existingSet, formData);
 
-        if (formData.getIdsToDelete() != null && !formData.getIdsToDelete().isEmpty()) {
-            for (Long cardId : formData.getIdsToDelete()) {
-                existingSet.getFlashcards().removeIf(c -> c.getId().equals(cardId));
-            }
-        }
-
-        for (FlashcardDTO dto : formData.getCards()) {
-            if (dto.getId() != null) {
-                existingSet.getFlashcards().stream()
-                        .filter(c -> c.getId().equals(dto.getId()))
-                        .findFirst()
-                        .ifPresent(card -> {
-                            card.setFront(dto.getFront());
-                            card.setBack(dto.getBack());
-                        });
-            } else {
-                Flashcard newCard = new Flashcard(dto.getFront(), dto.getBack());
-                existingSet.addFlashcard(newCard);
-            }
-
-        }
-
-        flashcardSetRepository.save(existingSet);
         return "redirect:/sets/" + id;
 
     }
