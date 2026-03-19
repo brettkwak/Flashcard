@@ -6,6 +6,7 @@ import com.flashcards.model.User;
 import com.flashcards.repository.FlashcardSetRepository;
 import com.flashcards.repository.UserRepository;
 import com.flashcards.service.FlashcardMapper;
+import com.flashcards.service.FlashcardSetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +21,16 @@ public class FlashcardSetApiController {
     private final FlashcardSetRepository flashcardSetRepository;
     private final UserRepository userRepository;
     private final FlashcardMapper flashcardMapper;
+    private final FlashcardSetService flashcardSetService;
 
     public FlashcardSetApiController(FlashcardSetRepository flashcardSetRepository,
                                      UserRepository userRepository,
-                                     FlashcardMapper flashcardMapper) {
+                                     FlashcardMapper flashcardMapper,
+                                     FlashcardSetService flashcardSetService) {
         this.flashcardSetRepository = flashcardSetRepository;
         this.userRepository = userRepository;
         this.flashcardMapper = flashcardMapper;
+        this.flashcardSetService = flashcardSetService;
     }
 
     // GET /api/v1/sets
@@ -75,6 +79,22 @@ public class FlashcardSetApiController {
                 .toUri();
 
         return ResponseEntity.created(location).body(savedDto);
+    }
+
+    // PUT /api/v1/sets/{id}
+    @PutMapping("/{id}")
+    public ResponseEntity<FlashcardSetDTO> updateSet(@PathVariable Long id, @RequestBody FlashcardSetDTO dto, Principal principal) {
+        FlashcardSet existingSet = flashcardSetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Set not found"));
+
+        if (!existingSet.getUser().getUsername().equals(principal.getName())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        flashcardSetService.updateFlashcardSet(existingSet, dto);
+
+        FlashcardSet updatedSet = flashcardSetRepository.findById(id).get();
+        return ResponseEntity.ok(flashcardMapper.toDTO(updatedSet));
     }
 
     // DELETE /api/v1/sets/{id}
