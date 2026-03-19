@@ -56,4 +56,38 @@ public class FlashcardSetApiController {
         return ResponseEntity.ok(flashcardMapper.toDTO(set));
     }
 
+    // POST /api/v1/sets
+    @PostMapping
+    public ResponseEntity<FlashcardSetDTO> createSet(@RequestBody FlashcardSetDTO dto, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        FlashcardSet set = flashcardMapper.toEntity(dto);
+        set.setUser(user);
+
+        FlashcardSet savedSet = flashcardSetRepository.save(set);
+        FlashcardSetDTO savedDto = flashcardMapper.toDTO(savedSet);
+
+        java.net.URI location = org.springframework.web.servlet.support.ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedSet.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(savedDto);
+    }
+
+    // DELETE /api/v1/sets/{id}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSet(@PathVariable Long id, Principal principal) {
+        FlashcardSet existingSet = flashcardSetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Set not found"));
+
+        if (!existingSet.getUser().getUsername().equals(principal.getName())) {
+            return ResponseEntity.status(403).build();
+        }
+
+        flashcardSetRepository.delete(existingSet);
+        return ResponseEntity.noContent().build();
+    }
 }
