@@ -42,4 +42,18 @@ public class FlashcardSetApiController {
 
         return ResponseEntity.ok(userSets);
     }
+
+    // GET single set /api/v1/sets/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<FlashcardSetDTO> getSetById(@PathVariable Long id, Principal principal) {
+        FlashcardSet set = flashcardSetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Set not found"));
+
+        if (!set.getUser().getUsername().equals(principal.getName())) {
+            return ResponseEntity.status(403).build(); // 403 Forbidden
+        }
+
+        return ResponseEntity.ok(flashcardMapper.toDTO(set));
+    }
+
 }
